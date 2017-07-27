@@ -442,6 +442,6 @@ test_function("boxplot", eq_condition = "equal", not_called_msg = "Did you call 
 
 test_error()
 
-success_msg("Excellent.  That is the outline of EDA Goal One.  While we may deviate especially in Step Three, Four, and Six depending on quality and type of data, this is the basic structure that you will continually repeat.")
+success_msg("Excellent.  That is the outline of EDA Goal Two and Three.  While we may deviate when evaluating Quantitative vs Categorical, Categorical vs Categorical, and Quantitative vs Quantitative, this is the basic structure that you will continually repeat.")
 
 ```
