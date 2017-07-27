@@ -99,7 +99,7 @@ all.equal(y1,y2)
 
 *** =sct
 ```{r}
-test_object("df",
+test_object("df", eq_condition="equal",
             undefined_msg = "Don't remove the definition of dataframe *df*.",
             incorrect_msg = "Look at your df definition and compare to original requirements.  Order of entries is important.")
 
@@ -113,7 +113,11 @@ test_output_contains("y1", incorrect_msg = "Did your output for *y1* match to ou
 
 test_output_contains("y2", incorrect_msg = "Did your output for *y2* match to our desired outcome?")
 
-test_output_contains(TRUE, incorrect_msg = "Did *y1* and *y2* match?")
+test_function("all.equal",
+              eq_condition = "equal",
+              not_called_msg = "Did you use all.equal to compare *y1* and *y2*?", incorrect_msg = "Did *y1* and *y2* match?")
+
+test_error()
 
 success_msg("Nice work.  Dataframes do not always exist when we start EDA.  We can build from scratch using *data.frame* function with named vectors representing each column of interest.  As we continue in the course, we will learn additional ways to create dataframes beyond the built in datasets we explored in DATA200.")
 
@@ -226,23 +230,31 @@ plot(density(mtcars$mpg), main="Density curve of mtcars mpg", xlab="mpg")
 *** =sct
 ```{r}
 
-test_student_typed("help(mtcars)", fixed=TRUE, not_typed_msg="Did you request help for mtcars dataset?")
+test_function("help",
+              eq_condition = "equal",
+              not_called_msg = "Did you request help for mtcars dataset?",
+              incorrect_msg = "Check the syntax for your call to help.")
+              
+test_function("str", eq_condition = "equal", not_called_msg = "Did you call str() for mtcars?",
+              incorrect_msg = "Check the syntax for your call to str.")
 
 
-test_student_typed("str(mtcars)", fixed=TRUE, not_typed_msg="Did you evaluate structure of mtcars dataset?")
+test_function("sum", eq_condition = "equal", not_called_msg = "Did you call sum() and complete.cases() for mtcars?",
+              incorrect_msg = "Check the syntax for your call to sum() and complete.cases()")
 
 
-test_student_typed("sum(complete.cases(mtcars))", fixed=TRUE, not_typed_msg="Did you calculate number of complete cases?")
+test_output_contains("nrow(mtcars)-sum(complete.cases(mtcars))", incorrect_msg="Did you calculate number of missing rows?")
 
 
-test_student_typed("nrow(mtcars)\b-\bsum(complete.cases(mtcars))", fixed=FALSE, not_typed_msg="Did you calculate number of missing rows?")
+test_function("hist", eq_condition = "equal", not_called_msg = "Did you call hist() with all appropriate parameters for mtcars?",
+              incorrect_msg = "Check the syntax and instructions for histogram plot.")
 
 
-test_student_typed('hist(mtcars$mpg,\bmain="Histogram of mtcars mpg",\bxlab="mpg")', fixed=FALSE, not_typed_msg="Check your histogram results for the correct vector and titles")
+test_function("plot", eq_condition = "equal", not_called_msg = "Did you call plot() for density curve of mtcars?",
+              incorrect_msg = "Check the syntax and instructions for density plot.")
 
 
-test_student_typed('plot(density(mtcars$mpg),\bmain="Density curve of mtcars mpg",\bxlab="mpg")', fixed=FALSE, not_typed_msg="Check your density plot results for the correct vector and titles.  Be sure you fit the density plot before you plot the result.  R works from inside out in terms of order of operation.")
-
+test_error()
 
 success_msg("Excellent.  That is the outline of EDA Goal One.  While we may deviate especially in Step Three, Four, and Six depending on quality and type of data, this is the basic structure that you will continually repeat.")
 
@@ -297,7 +309,7 @@ ____(mtcars____)
 quantile(____$____, seq = c(0, 1.0, 0.25))
 
 # Goal Two: Describe the data for vector of interest.  Use *quantile()* function with modified sequence to obtain quintiles
-quintile(____$____, seq = c(0, 1.0, ____))
+quantile(____$____, seq = c(0, 1.0, ____))
 
 ## Goal Three: Assess and transform the measures of central tendency.  At this point, you should have some idea of skewing that we may see when we plot data
 
@@ -317,7 +329,8 @@ ____(____(____(mtcars$____)))
 ____(____(mtcars$____), main="____", xlab="____", col="____")
 
 ## Goal Three: Assess and transform.  Re-assess distribution of quantitative variable by evaluating within groups of categorical variable.  Create a categorical variable from the existing *am* vector and replace the vector
-mtcars$am <- ____(mtcars$____, levels=c("manual","____"))
+mtcars$am <- ____(mtcars$____)
+levels(mtcars$am) <- c("manual","____")
 
 ## Goal Three: Assess and transform.  Regenerate measures of central tendency by categorical variable *am*.  First, create function for measures of central tendency including mean, median, and trimmed mean with trim of .25.
 center_stats <- function(x) (c(mean=____(x), median=____(x), trim=mean(x,trim=____)))
@@ -346,7 +359,7 @@ summary(mtcars$mpg)
 quantile(mtcars$mpg, seq = c(0, 1.0, 0.25))
 
 # Goal Two: Describe the data for vector of interest.  Use *quantile()* function with modified sequence to obtain quintiles
-quintile(mtcars$mpg, seq = c(0, 1.0, 0.20))
+quantile(mtcars$mpg, seq = c(0, 1.0, 0.20))
 
 ## Goal Three: Assess and transform the measures of central tendency.  At this point, you should have some idea of skewing that we may see when we plot data
 
@@ -366,7 +379,8 @@ diff(range(scale(mtcars$mpg)))
 plot(density(mtcars$mpg), main="Density curve of mpg", xlab="mpg", col="blue")
 
 ## Goal Three: Assess and transform.  Re-assess distribution of quantitative variable by evaluating within groups of categorical variable.  Create a categorical variable from the existing *am* vector and replace the vector
-mtcars$am <- factor(mtcars$mpg, levels=c("manual","automatic"))
+mtcars$am <- factor(mtcars$am)
+levels(mtcars$am) <- c("manual","automatic")
 
 ## Goal Three: Assess and transform.  Regenerate measures of central tendency by categorical variable *am*.  First, create function for measures of central tendency including mean, median, and trimmed mean with trim of .25.
 center_stats <- function(x) (c(mean=mean(x), median=median(x), trim=mean(x,trim=0.25)))
@@ -388,6 +402,45 @@ boxplot(mpg~am, data=mtcars, main="Boxplot of mpg by Transmission", xlab="Transm
 *** =sct
 ```{r}
 
+test_function("summary",
+              eq_condition = "equal",
+              not_called_msg = "Did you summary statistics for mtcars mpg variable?",
+              incorrect_msg = "Check the syntax for your call to help.")
+              
+test_function("quantile", index=1, eq_condition = "equal", not_called_msg = "Did you call quantile() to generate quartiles for mpg variable?",
+              incorrect_msg = "Check the syntax for your call to quantile.")
+
+test_function("quantile", index=2, eq_condition = "equal", not_called_msg = "Did you call quantile() to generate quintiles for mpg variable?",
+              incorrect_msg = "Check the syntax for your call to quantile for the quintile calculation.")
+
+test_function("min", eq_condition = "equal", not_called_msg = "Did you identify minimum value for mpg variable?",
+              incorrect_msg = "Check the syntax for your call to min.")
+
+test_function("max", eq_condition = "equal", not_called_msg = "Did you identify maximum value for mpg variable?",
+              incorrect_msg = "Check the syntax for your call to max.")
+
+test_function("sd", eq_condition = "equal", not_called_msg = "Did you identify standard deviation for mpg variable?",
+              incorrect_msg = "Check the syntax for your call to sd.")
+
+test_function("diff", eq_condition = "equal", not_called_msg = "Did you identify zscore spread?",
+              incorrect_msg = "Check the syntax for your call to diff, range, and scale.")
+
+test_function("plot", eq_condition = "equal", not_called_msg = "Did you call plot() for density curve for mpg variable?",
+              incorrect_msg = "Check the syntax and instructions for density plot.")
+
+test_object("mtcars", eq_condition = "equal", incorrect_msg = "Check the levels defined for mtcars$am.  Do you have levels for 'manual' and 'automatic'?")
+
+test_function("aggregate", index=1, eq_condition = "equal", not_called_msg = "Did you identify aggregate results for mpg variable center_stats?",
+              incorrect_msg = "Check your aggregate syntax; make sure you used formula notation.  Check your function definition for center_stats.")
+              
+test_function("aggregate", index=2, eq_condition = "equal", not_called_msg = "Did you identify aggregate results for mpg variable spread_stats?",
+              incorrect_msg = "Check your aggregate syntax; make sure you used formula notation.  Check your function definition for spread_stats.")
+              
+test_function("boxplot", eq_condition = "equal", not_called_msg = "Did you call boxplot() for variable mpg?",
+              incorrect_msg = "Check the syntax and instructions for box plot including color definitions.")
+
+
+test_error()
 
 success_msg("Excellent.  That is the outline of EDA Goal One.  While we may deviate especially in Step Three, Four, and Six depending on quality and type of data, this is the basic structure that you will continually repeat.")
 
