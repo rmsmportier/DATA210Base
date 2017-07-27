@@ -22,8 +22,10 @@ In the editor on the right there is already some sample code. Complete entry acc
 - The first column *x* has been added for you
 - Complete entries for *y* to contain the values "May", "Oct", "Mar", "Aug", "Feb".  Complete entries for *z* to contain the values 2010, 2015, 2018, 2017, 2019.
 - Print current dataframe
-- Now complete the selection to obtain output comparable to above.
-- Use the *$* operator to select same values.  
+- Complete the selection using row, column indicator and assign results to variable *y1*
+- Print contents of *y1*
+- Use the *$* operator to select same values from column *y* and assign results to variable *y2*.  
+- Specify 2 arguments for *all.equal*, the variables *y1* and *y2*
 
 *** =hint
 - The *c()* combine function works for all types of vectors not just numeric
@@ -48,19 +50,19 @@ df <- data.frame(
 # Print the current dataframe
 print(df)
 
-# Modify row values to select desired rows, and assign to variable *y1*
+# Modify row values to select desired rows, and assign to variable y1
 df[c(1, ____), "y"]
 
 # Print contents of *y1*
 print(____)
 
-# Select row values using $ operator, and assign to variable *y2*
+# Select row values using $ operator, and assign to variable y2
 df____y[c(____)]
 
-# Print contents of *y2*
+# Print contents of y2
 print(____)
 
-# Determine if *y1* and *y2* are equivalent
+# Determine if y1 and y2 are equivalent
 all.equal(____,____)
 
 ```
@@ -107,11 +109,13 @@ test_object("y1",
 test_object("y2",
             undefined_msg = "Did you select row values and assign to variable *y2*?")
 
-test_output_contains("^[1] May Aug$", pattern=True, no_output_msg = "Did your output results match to our desired outcome?")
+test_output_contains("y1", incorrect_msg = "Did your output for *y1* match to our desired outcome?")
 
-test_output_contains("True", pattern=False, no_output_msg = "Did your comparison of *y1* and *y2* result in TRUE?")
+test_output_contains("y2", incorrect_msg = "Did your output for *y2* match to our desired outcome?")
 
-success_msg("Nice work.  Dataframes do not always exist when we start.  We can build from scratch using *data.frame* function with named vectors representing each column of interest.")
+test_output_contains(TRUE, incorrect_msg = "Did *y1* and *y2* match?")
+
+success_msg("Nice work.  Dataframes do not always exist when we start EDA.  We can build from scratch using *data.frame* function with named vectors representing each column of interest.  As we continue in the course, we will learn additional ways to create dataframes beyond the built in datasets we explored in DATA200.")
 
 ```
 
