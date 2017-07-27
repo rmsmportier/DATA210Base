@@ -1,114 +1,117 @@
 ---
-title       : Insert the chapter title here
-description : Insert the chapter description here
+title       : Homework 1
+description : What Is Data Science?
 attachments :
   slides_link : https://s3.amazonaws.com/assets.datacamp.com/course/teach/slides_example.pdf
 
---- type:MultipleChoiceExercise lang:r xp:50 skills:1 key:ab3d40c254
-## A really bad movie
 
-Have a look at the plot that showed up in the viewer to the right. Which type of movie has the worst rating assigned to it?
+--- type:NormalExercise xp:100 skills:1 key:15d729634a
+## Pulling Data From Dataframe
+
+We are going to reproduce the following output by defining a dataframe *df*
+
+*[1] May Aug*
+*Levels: Aug Feb Mar May Oct*
+
+Complete the instructions in the console pane according to instructions
 
 *** =instructions
-- Adventure
-- Action
-- Animation
-- Comedy
+
+In the editor on the right there is already some sample code. Complete entry according to the following instructions:
+
+- The first column *x* has been added for you
+- Complete entries for *y* to contain the values "May", "Oct", "Mar", "Aug", "Feb".  Complete entries for *z* to contain the values 2010, 2015, 2018, 2017, 2019.
+- Print current dataframe
+- Now complete the selection to obtain output comparable to above.
+- Use the *$* operator to select same values.  
 
 *** =hint
-Have a look at the plot. Which color does the point with the lowest rating have?
+- The *c()* combine function works for all types of vectors not just numeric
+- Keep in mind that referencing values from dataframe we specify 2 dimensions, row then column
+- When using *c()* function for selection, the values in *c()* are the indices desired for row or column dimension from dataframe
+- Keep in mind when working with *$* operator that you are now working with a 1-dimensional vector.  You only need to specify 1 dimension.
 
 *** =pre_exercise_code
 ```{r}
-# The pre exercise code runs code to initialize the user's workspace.
-# You can use it to load packages, initialize datasets and draw a plot in the viewer
-
-movies <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/course/introduction_to_r/movies.csv")
-
-library(ggplot2)
-
-ggplot(movies, aes(x = runtime, y = rating, col = genre)) + geom_point()
-```
-
-*** =sct
-```{r}
-# SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
-
-msg_bad <- "That is not correct!"
-msg_success <- "Exactly! There seems to be a very bad action movie in the dataset."
-test_mc(correct = 2, feedback_msgs = c(msg_bad, msg_success, msg_bad, msg_bad))
-```
-
---- type:NormalExercise lang:r xp:100 skills:1 key:989c48772b
-## More movies
-
-In the previous exercise, you saw a dataset about movies. In this exercise, we'll have a look at yet another dataset about movies!
-
-A dataset with a selection of movies, `movie_selection`, is available in the workspace.
-
-*** =instructions
-- Check out the structure of `movie_selection`.
-- Select movies with a rating of 5 or higher. Assign the result to `good_movies`.
-- Use `plot()` to  plot `good_movies$Run` on the x-axis, `good_movies$Rating` on the y-axis and set `col` to `good_movies$Genre`.
-
-*** =hint
-- Use `str()` for the first instruction.
-- For the second instruction, you should use `...[movie_selection$Rating >= 5, ]`.
-- For the plot, use `plot(x = ..., y = ..., col = ...)`.
-
-*** =pre_exercise_code
-```{r}
-# You can also prepare your dataset in a specific way in the pre exercise code
-load(url("https://s3.amazonaws.com/assets.datacamp.com/course/teach/movies.RData"))
-movie_selection <- Movies[Movies$Genre %in% c("action", "animated", "comedy"), c("Genre", "Rating", "Run")]
-
-# Clean up the environment
-rm(Movies)
+# no pec
 ```
 
 *** =sample_code
 ```{r}
-# movie_selection is available in your workspace
+# Complete the df definition
+df <- data.frame(
+    x = c("H", "N", "T", "W", "V"), 
+    y = c("May", "Oct", ____, ____, "Feb"), 
+    z = c(2010, ____, 2018, ____, 2019)
+)
 
-# Check out the structure of movie_selection
+# Print the current dataframe
+print(df)
 
+# Modify row values to select desired rows, and assign to variable *y1*
+df[c(1, ____), "y"]
 
-# Select movies that have a rating of 5 or higher: good_movies
+# Print contents of *y1*
+print(____)
 
+# Select row values using $ operator, and assign to variable *y2*
+df____y[c(____)]
 
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
+# Print contents of *y2*
+print(____)
+
+# Determine if *y1* and *y2* are equivalent
+all.equal(____,____)
 
 ```
 
 *** =solution
 ```{r}
-# movie_selection is available in your workspace
+# Complete the df definition
+df <- data.frame(
+    x = c("H", "N", "T", "W", "V"), 
+    y = c("May", "Oct", "Mar", "Aug", "Feb"), 
+    z = c(2010, 2015, 2018, 2017, 2019)
+)
 
-# Check out the structure of movie_selection
-str(movie_selection)
+# Print the current dataframe
+print(df)
 
-# Select movies that have a rating of 5 or higher: good_movies
-good_movies <- movie_selection[movie_selection$Rating >= 5, ]
+# Modify row values to select desired rows, and assign to variable *y1*
+y1 <- df[c(1, 4), "y"]
 
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
-plot(good_movies$Run, good_movies$Rating, col = good_movies$Genre)
+# Print contents of *y1*
+print(y1)
+
+# Select row values using $ operator, and assign to variable *y2*
+y2 <- df$y[c(1,4)]
+
+# Print contents of *y1*
+print(y2)
+
+# Determine if *y1* and *y2* are equivalent
+all.equal(y1,y2)
+
+
 ```
 
 *** =sct
 ```{r}
-# SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
+test_object("df",
+            undefined_msg = "Don't remove the definition of dataframe *df*.",
+            incorrect_msg = "Look at your df definition and compare to original requirements.  Order of entries is important.")
 
-test_function("str", args = "object",
-              not_called_msg = "You didn't call `str()`!",
-              incorrect_msg = "You didn't call `str(object = ...)` with the correct argument, `object`.")
+test_object("y1",
+            undefined_msg = "Did you select row values and assign to variable *y1*?")
 
-test_object("good_movies")
+test_object("y2",
+            undefined_msg = "Did you select row values and assign to variable *y2*?")
 
-test_function("plot", args = "x")
-test_function("plot", args = "y")
-test_function("plot", args = "col")
+test_output_contains("^[1] May Aug$", pattern=True, no_output_msg = "Did your output results match to our desired outcome?")
 
-test_error()
+test_output_contains("True", pattern=False, no_output_msg = "Did your comparison of *y1* and *y2* result in TRUE?")
 
-success_msg("Good work!")
+success_msg("Nice work.  Dataframes do not always exist when we start.  We can build from scratch using *data.frame* function with named vectors representing each column of interest.")
+
 ```
+
